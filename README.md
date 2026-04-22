@@ -1,58 +1,56 @@
-# Binance Futures Testnet Trading Bot
-
-![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
-
+Binance Futures Testnet Trading Bot
 A modular, command-line trading bot built for the Binance USDT-M Futures Testnet. This project demonstrates clean architecture, robust error handling, structured logging, and validated order execution using raw REST APIs without relying on third-party SDKs.
 
----
+Table of Contents
+Overview
 
-## Table of Contents
-* [Overview](#overview)
-* [Features](#features)
-* [Architecture](#architecture)
-* [Project Structure](#project-structure)
-* [Getting Started](#getting-started)
-* [Usage Examples](#usage-examples)
-* [System Design Highlights](#system-design-highlights)
-* [Roadmap](#roadmap)
-* [License](#license)
+Features
 
----
+Architecture
 
-## Overview
+Project Structure
 
+Getting Started
+
+Usage Examples
+
+System Design Highlights
+
+Roadmap
+
+License
+
+Overview
 This trading bot provides a comprehensive CLI to interact with the Binance Futures Testnet. It supports multiple order types, strictly validates all inputs before execution to prevent invalid requests, and logs every operation for complete traceability. The system is designed using a layered architecture, closely mimicking production-grade backend services.
 
----
+Features
+Multiple Order Types: Support for Market, Limit, and Stop-Market orders.
 
-## Features
+Pre-flight Validation: Strict input validation before any API calls are made.
 
-* **Multiple Order Types:** Support for Market, Limit, and Stop-Market orders.
-* **Pre-flight Validation:** Strict input validation before any API calls are made.
-* **Comprehensive Logging:** Structured logging with both console output and rotating file logs.
-* **Resilience:** Built-in retry logic for network failures.
-* **Clean CLI:** Extensible and user-friendly command-line interface.
-* **No Third-Party SDKs:** Direct API integration with custom authentication and request signing.
+Comprehensive Logging: Structured logging with both console output and rotating file logs.
 
----
+Resilience: Built-in retry logic for network failures.
 
-## Architecture
+Clean CLI: Extensible and user-friendly command-line interface.
 
+No Third-Party SDKs: Direct API integration with custom authentication and request signing.
+
+Architecture
 The bot relies on a clear separation of concerns, moving linearly from user input to the external exchange:
 
-**CLI** -> **Validation Layer** -> **Orders Layer** -> **API Client** -> **Binance API**
+CLI ➡️ Validation Layer ➡️ Orders Layer ➡️ API Client ➡️ Binance API
 
-* **CLI:** Handles user interaction and argument parsing.
-* **Validators:** Ensures the correctness of inputs (e.g., positive quantities, required prices).
-* **Orders Layer:** Manages business logic and payload formatting.
-* **API Client:** Handles network communication, request signing, retries, and error parsing.
+CLI: Handles user interaction and argument parsing.
 
----
+Validators: Ensures the correctness of inputs (e.g., positive quantities, required prices).
 
-## Project Structure
+Orders Layer: Manages business logic and payload formatting.
 
-```text
+API Client: Handles network communication, request signing, retries, and error parsing.
+
+Project Structure
+Plaintext
 trading_bot/
 ├── bot/
 │   ├── client.py           # Binance API client (signing, retries, error handling)
@@ -63,7 +61,6 @@ trading_bot/
 ├── logs/                   # Auto-created log files
 ├── requirements.txt
 └── README.md
-
 Getting Started
 Prerequisites
 Python: 3.8 or higher.
@@ -74,8 +71,9 @@ API Credentials: Your Testnet API Key and Secret.
 
 1. Install Dependencies
 Clone the repository and install the required packages:
-pip install -r requirements.txt
 
+Bash
+pip install -r requirements.txt
 2. Configure API Credentials
 Option 1: Environment Variables (Recommended)
 
