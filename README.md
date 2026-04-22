@@ -1,235 +1,166 @@
-# Binance Futures Testnet Trading Bot
+Binance Futures Testnet Trading Bot
+A modular, command-line trading bot built for the Binance USDT-M Futures Testnet. This project demonstrates clean architecture, robust error handling, structured logging, and validated order execution using raw REST APIs without relying on third-party SDKs.
 
-A modular command-line trading bot for Binance USDT-M Futures Testnet.  
-This project demonstrates clean architecture, robust error handling, structured logging, and validated order execution using raw REST APIs.
+ Table of Contents
+Overview
 
----
+Features
 
-## Overview
+Architecture
 
-This trading bot provides a CLI to interact with Binance Futures Testnet. It supports multiple order types, validates all inputs before execution, and logs every operation for traceability.
+Project Structure
 
-The system is designed using a layered architecture similar to production backend services.
+Getting Started
 
----
+Usage Examples
 
-## Features
+System Design Highlights
 
-- Market, Limit, and Stop-Market order support
-- Input validation before API calls
-- Structured logging (console + rotating file logs)
-- Retry logic for network failures
-- Clean and extensible CLI interface
-- Modular codebase with clear separation of concerns
+Roadmap
 
----
+License
 
-## Project Structure
+Overview
+This trading bot provides a comprehensive CLI to interact with the Binance Futures Testnet. It supports multiple order types, strictly validates all inputs before execution to prevent invalid requests, and logs every operation for complete traceability. The system is designed using a layered architecture, closely mimicking production-grade backend services.
 
+Features
+Multiple Order Types: Support for Market, Limit, and Stop-Market orders.
 
+Pre-flight Validation: Strict input validation before any API calls are made.
+
+Comprehensive Logging: Structured logging with both console output and rotating file logs.
+
+Resilience: Built-in retry logic for network failures.
+
+Clean CLI: Extensible and user-friendly command-line interface.
+
+No Third-Party SDKs: Direct API integration with custom authentication and request signing.
+
+Architecture
+
+The bot relies on a clear separation of concerns, moving linearly from user input to the external exchange:
+
+CLI -->Validation Layer--> Orders Layer-->API Client-->Binance API
+
+CLI: Handles user interaction and argument parsing.
+
+Validators: Ensures the correctness of inputs (e.g., positive quantities, required prices).
+
+Orders Layer: Manages business logic and payload formatting.
+
+API Client: Handles network communication, request signing, retries, and error parsing.
+
+ Project Structure
 trading_bot/
 ├── bot/
-│ ├── client.py # Binance API client (signing, retries, error handling)
-│ ├── orders.py # Order orchestration and formatting
-│ ├── validators.py # Input validation logic
-│ └── logging_config.py # Logging setup
-├── cli.py # CLI entry point
-├── logs/ # Log files (auto-created)
-├── README.md
-└── requirements.txt
+│   ├── client.py           # Binance API client (signing, retries, error handling)
+│   ├── orders.py           # Order orchestration and formatting
+│   ├── validators.py       # Input validation logic
+│   └── logging_config.py   # Logging setup
+├── cli.py                  # CLI entry point
+├── logs/                   # Auto-created log files
+├── requirements.txt
+└── README.md
 
+Getting Started
+Prerequisites
+Python: 3.8 or higher.
 
----
+Binance Account: A valid Binance Futures Testnet account.
 
-## Architecture
+API Credentials: Your Testnet API Key and Secret.
 
-
-CLI → Validation Layer → Orders Layer → API Client → Binance API
-
-
-- CLI handles user interaction  
-- Validators ensure correctness of inputs  
-- Orders layer manages business logic  
-- Client handles API communication  
-
----
-
-## Setup
-
-### Prerequisites
-
-- Python 3.8+
-- Binance Futures Testnet account: https://testnet.binancefuture.com
-- API Key and Secret from Testnet
-
----
-
-### Install dependencies
-
+1. Install Dependencies
+Clone the repository and install the required packages:
 
 pip install -r requirements.txt
 
+(Note: Dependencies include requests and urllib3.)
 
----
-
-### Configure API credentials
-
-**Option 1: Environment variables (recommended)**
-
+2. Configure API Credentials
+Option 1: Environment Variables (Recommended)
 
 export BINANCE_API_KEY="your_api_key"
 export BINANCE_API_SECRET="your_api_secret"
 
-
-**Option 2: Pass via CLI**
-
+Option 2: Pass via CLI Arguments
 
 python cli.py --api-key YOUR_KEY --api-secret YOUR_SECRET order ...
 
-
----
-
-## Usage
-
-### Market Order
-
+Usage Examples
+Placing Orders
+Market Order
 
 python cli.py order --symbol BTCUSDT --side BUY --type MARKET --quantity 0.001
 
-
----
-
-### Limit Order
-
+Limit Order
 
 python cli.py order --symbol ETHUSDT --side SELL --type LIMIT --quantity 0.01 --price 3500
 
-
----
-
-### Stop-Market Order
-
+Stop-Market Order
 
 python cli.py order --symbol BTCUSDT --side BUY --type STOP_MARKET --quantity 0.001 --stop-price 65000
 
-
----
-
-### Account Information
-
+Account & Positions
+View Account Information
 
 python cli.py account
 
-
----
-
-### Open Orders
-
+View Open Orders
 
 python cli.py open-orders
 
-
----
-
-### Positions
-
+View Active Positions
 
 python cli.py positions
 
+System Design Highlights
+Validation
+All inputs are thoroughly validated before reaching the API client. This prevents invalid requests and improves reliability.
 
----
+Quantity must be a positive number.
 
-## Validation
+price is strictly required for LIMIT orders.
 
-All inputs are validated before API calls.
+stop-price is strictly required for STOP_MARKET orders.
 
-Examples:
+side is restricted to BUY or SELL.
 
-- Quantity must be positive  
-- Price is required for LIMIT orders  
-- Stop price is required for STOP_MARKET orders  
-- Side must be BUY or SELL  
+Logging
+Console: INFO level for clear user feedback.
 
-This prevents invalid requests and improves reliability.
+File: DEBUG level for deep troubleshooting (logs/trading_bot.log).
 
----
+Features: Rotating log files (max 5 MB, up to 3 backups), full request/response tracking, and detailed error tracing.
 
-## Logging
+Error Handling
+The CLI gracefully manages user interruptions, validation errors, API errors, and network failures using custom exceptions:
 
-- Console logging: INFO level  
-- File logging: DEBUG level  
+BinanceAPIError: Captures and formats API-level failures.
 
-Logs are stored in:
+BinanceNetworkError: Captures underlying network/connection issues.
 
+Assumptions & Constraints
+Operates only on the Binance Futures Testnet.
 
-logs/trading_bot.log
+Supports USDT-M perpetual contracts.
 
+Assumes a one-way position mode (positionSide=BOTH).
 
-Features:
+Quantity precision is validated directly by the exchange API.
 
-- Rotating log files (5 MB, 3 backups)
-- Full request/response tracking
-- Error tracing
+Future Improvements
+[ ] Add STOP_LIMIT order support.
 
----
+[ ] Implement automated trading strategies.
 
-## Error Handling
+[ ] Add WebSocket support for real-time market data.
 
-Custom exceptions:
+[ ] Introduce a historical backtesting module.
 
-- BinanceAPIError – API-level failures  
-- BinanceNetworkError – network issues  
+[ ] Expand unit and integration test coverage.
 
-The CLI gracefully handles:
+[ ] Dockerize the application for easier deployment.
 
-- Validation errors  
-- API errors  
-- Network failures  
-- User interruptions  
-
----
-
-## Assumptions
-
-- Uses Binance Futures Testnet only  
-- Supports USDT-M perpetual contracts  
-- Uses one-way position mode (positionSide=BOTH)  
-- Quantity precision is validated by exchange  
-
----
-
-## Dependencies
-
-- requests  
-- urllib3  
-
-No third-party Binance SDK is used.
-
----
-
-## Why This Project
-
-This project demonstrates:
-
-- Clean software design with layered architecture  
-- Real-world API integration with authentication and signing  
-- Robust validation and error handling  
-- Production-style logging practices  
-- CLI-based system design  
-
----
-
-## Future Improvements
-
-- Add Stop-Limit order support  
-- Implement automated trading strategies  
-- Add WebSocket support for real-time data  
-- Introduce backtesting module  
-- Add unit tests  
-- Dockerize the application  
-
----
-
-## License
-
-This project is available under the MIT License.
+License
+This project is open-sourced software licensed under the MIT License.
