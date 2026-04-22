@@ -83,7 +83,7 @@ python cli.py order --symbol BTCUSDT --side BUY --type MARKET --quantity 0.001
   Created At         : 2026-04-22 15:09:28 UTC
 ────────────────────────────────────────────────────────────
 
-  ✅  SUCCESS — Order #4710427847 accepted by exchange (status: FILLED)
+    SUCCESS — Order #4710427847 accepted by exchange (status: FILLED)
 ```
 
 ---
@@ -134,15 +134,15 @@ The bot validates all inputs before hitting the API:
 ```bash
 # Missing price for LIMIT order → error before API call
 python cli.py order --symbol BTCUSDT --side BUY --type LIMIT --quantity 0.001
-# ❌  Validation error: Price is required for LIMIT orders.
+#   Validation error: Price is required for LIMIT orders.
 
 # Zero quantity
 python cli.py order --symbol BTCUSDT --side SELL --type MARKET --quantity 0
-# ❌  Validation error: Quantity must be positive, got 0.
+#   Validation error: Quantity must be positive, got 0.
 
 # Invalid side
 python cli.py order --symbol BTCUSDT --side LONG --type MARKET --quantity 0.001
-# ❌  Validation error: Invalid side 'LONG'. Must be one of: BUY, SELL.
+#   Validation error: Invalid side 'LONG'. Must be one of: BUY, SELL.
 ```
 
 ---
